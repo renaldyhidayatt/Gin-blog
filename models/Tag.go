@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/gosimple/slug"
 	"gorm.io/gorm"
 )
 
@@ -19,6 +20,7 @@ type ModelTag struct {
 
 func (m *ModelTag) BeforeCreate(db *gorm.DB) error {
 	m.ID = uuid.NewString()
+	m.Slug = slug.Make(m.Name)
 	m.CreatedAt = time.Now().Local()
 
 	return nil
@@ -26,6 +28,7 @@ func (m *ModelTag) BeforeCreate(db *gorm.DB) error {
 
 func (m *ModelTag) BeforeUpdate(db *gorm.DB) error {
 	m.ID = uuid.NewString()
+	m.Slug = slug.Make(m.Name)
 	m.UpdatedAt = time.Now().Local()
 	return nil
 }

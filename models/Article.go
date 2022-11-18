@@ -15,7 +15,7 @@ type ModelArticle struct {
 	Description string `json:"description" gorm:"type:text; not null"`
 	Body        string `json:"body" gorm:"type:varchar; not null"`
 	User        ModelUser
-	UserId      uint
+	UserID      string          `json:"user_id" gorm:"index"`
 	Tags        []ModelTag      `gorm:"many2many:articles_tags;"`
 	Categories  []ModelCategory `gorm:"many2many:articles_categories;"`
 	Comments    []ModelComment  `gorm:"foreignKey:ArticleId"`
@@ -33,6 +33,7 @@ func (m *ModelArticle) BeforeCreate(db *gorm.DB) error {
 
 func (m *ModelArticle) BeforeUpdate(db *gorm.DB) error {
 	m.ID = uuid.NewString()
+	m.Slug = slug.Make(m.Title)
 	m.UpdatedAt = time.Now().Local()
 
 	return nil

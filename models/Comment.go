@@ -8,24 +8,20 @@ import (
 )
 
 type ModelComment struct {
-	ID               string       `json:"id" gorm:"primary_key"`
-	Content          string       `gorm:"size:2048"`
-	Article          ModelArticle `gorm:"foreignKey:ArticleId"`
-	ArticleId        uint
-	User             ModelUser `gorm:"foreignKey:UserId"`
-	UserId           uint
-	RepliedComment   *ModelComment `gorm:"foreignkey:RepliedCommentID"`
-	RepliedCommentID *string
-	Replies          []*ModelComment `gorm:"foreignkey:ID"`
-	CreatedAt        time.Time       `json:"created_at"`
-	UpdatedAt        time.Time       `json:"updated_at"`
+	ID        string       `json:"id" gorm:"primary_key"`
+	Content   string       `gorm:"size:2048"`
+	Article   ModelArticle `gorm:"foreignKey:ArticleId"`
+	ArticleId string
+	User      ModelUser `gorm:"foreignKey:UserId"`
+	UserId    string
+
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (m *ModelComment) BeforeCreate() error {
 	m.ID = uuid.NewString()
-	if m.RepliedComment != nil {
-		m.RepliedCommentID = &m.RepliedComment.ID
-	}
+
 	m.CreatedAt = time.Now().Local()
 
 	return nil

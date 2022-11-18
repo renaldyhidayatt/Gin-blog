@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/gosimple/slug"
 	"gorm.io/gorm"
 )
 
@@ -18,11 +19,12 @@ type ModelCategory struct {
 
 func (m *ModelCategory) BeforeCreate(db *gorm.DB) error {
 	m.CreatedAt = time.Now().Local()
-
+	m.Slug = slug.Make(m.Name)
 	return nil
 }
 
 func (m *ModelCategory) BeforeUpdate(db *gorm.DB) error {
+	m.Slug = slug.Make(m.Name)
 	m.UpdatedAt = time.Now().Local()
 	return nil
 }
