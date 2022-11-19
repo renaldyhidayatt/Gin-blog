@@ -10,7 +10,7 @@ type serviceArticle struct {
 	article entity.EntityArticle
 }
 
-func NewServideArticle(article entity.EntityArticle) *serviceArticle {
+func NewServiceArticle(article entity.EntityArticle) *serviceArticle {
 	return &serviceArticle{article: article}
 }
 

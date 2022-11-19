@@ -27,10 +27,10 @@ func (h *handlerCategory) HandlerResults(ctx *gin.Context) {
 	res, err := h.category.EntityResults()
 
 	if err.Type == "error_results_01" {
-		helpers.APIResponse(ctx, "User not found ", err.Code, nil)
+		helpers.APIResponse(ctx, "Category not found ", err.Code, nil)
 		return
 	}
-	helpers.APIResponse(ctx, "User found", http.StatusOK, res)
+	helpers.APIResponse(ctx, "Category found", http.StatusOK, res)
 
 }
 
@@ -42,11 +42,11 @@ func (h *handlerCategory) HandlerResult(ctx *gin.Context) {
 	res, err := h.category.EntityResult(&body)
 
 	if err.Type == "error_result_01" {
-		helpers.APIResponse(ctx, fmt.Sprintf("Outlet data not found for this id %s ", id), err.Code, nil)
+		helpers.APIResponse(ctx, fmt.Sprintf("Category data not found for this id %s ", id), err.Code, nil)
 		return
 
 	}
-	helpers.APIResponse(ctx, "USer data already to use", http.StatusOK, res)
+	helpers.APIResponse(ctx, "Category data already to use", http.StatusOK, res)
 }
 
 func (h *handlerCategory) HandlerCreate(ctx *gin.Context) {
@@ -61,16 +61,16 @@ func (h *handlerCategory) HandlerCreate(ctx *gin.Context) {
 	_, error := h.category.EntityCreate(&body)
 
 	if error.Type == "error_update_01" {
-		helpers.APIResponse(ctx, "User email already exist", error.Code, nil)
+		helpers.APIResponse(ctx, "Category name already exist", error.Code, nil)
 		return
 	}
 
 	if error.Type == "error_create_02" {
-		helpers.APIResponse(ctx, "failed create user", error.Code, nil)
+		helpers.APIResponse(ctx, "failed create category", error.Code, nil)
 		return
 	}
 
-	helpers.APIResponse(ctx, "Create new User successfully", http.StatusCreated, nil)
+	helpers.APIResponse(ctx, "Create new Category successfully", http.StatusCreated, nil)
 }
 
 func (h *handlerCategory) HandlerUpdate(ctx *gin.Context) {
@@ -90,11 +90,11 @@ func (h *handlerCategory) HandlerUpdate(ctx *gin.Context) {
 	}
 
 	if error.Type == "error_create_02" {
-		helpers.APIResponse(ctx, "failed update user", error.Code, nil)
+		helpers.APIResponse(ctx, "failed update category", error.Code, nil)
 		return
 	}
 
-	helpers.APIResponse(ctx, "Update User successfully", http.StatusCreated, nil)
+	helpers.APIResponse(ctx, "Category User successfully", http.StatusCreated, nil)
 }
 
 func (h *handlerCategory) HandlerDelete(ctx *gin.Context) {
@@ -111,9 +111,9 @@ func (h *handlerCategory) HandlerDelete(ctx *gin.Context) {
 	res, error := h.category.EntityResult(&body)
 
 	if error.Type == "error_result_01" {
-		helpers.APIResponse(ctx, fmt.Sprintf("User data not found for this id %s ", id), error.Code, nil)
+		helpers.APIResponse(ctx, fmt.Sprintf("Categpry data not found for this id %s ", id), error.Code, nil)
 		return
 
 	}
-	helpers.APIResponse(ctx, "USer data already to use", http.StatusOK, res)
+	helpers.APIResponse(ctx, "Category data already to use", http.StatusOK, res)
 }
