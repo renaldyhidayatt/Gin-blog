@@ -5,6 +5,8 @@ import (
 	"ginBlog/repository"
 	"ginBlog/service"
 
+	"ginBlog/middleware"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -24,6 +26,8 @@ func NewRoute(db *gorm.DB, router *gin.Engine) {
 	route.POST("/ping", handlerAuth.HandlerHello)
 	route.POST("/register", handlerAuth.HandlerRegister)
 	route.POST("/login", handlerAuth.HandlerLogin)
+
+	routeUser.Use(middleware.AuthToken())
 
 	routeUser.GET("/", handlerUser.HandlerResults)
 	routeUser.POST("/create", handlerUser.HandlerCreate)

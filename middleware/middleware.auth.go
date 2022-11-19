@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"ginBlog/utils"
 	"net/http"
 	"strings"
@@ -35,9 +34,8 @@ func AuthToken() gin.HandlerFunc {
 
 		accessToken := utils.ExtractToken(decodeToken)
 
-		fmt.Println(accessToken)
-
 		ctx.Set("user", accessToken)
+		ctx.Set("userID", accessToken.ID)
 		ctx.Next()
 
 	})

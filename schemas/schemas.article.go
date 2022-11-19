@@ -6,6 +6,6 @@ type SchemaArticle struct {
 	Description string             `json:"description" validate:"required"`
 	Body        string             `json:"body" validate:"required"`
 	UserID      string             `json:"user_id" validate:"required"`
-	Tag         []SchemaTag        `json:"tags"`
+	Tag         []SchemaTag        `json:"tag"`
 	Categories  []SchemaCategories `json:"category"`
 }

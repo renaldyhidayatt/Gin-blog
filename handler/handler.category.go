@@ -10,21 +10,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type handlerUser struct {
-	user entity.EntityUser
+type handlerCategory struct {
+	category entity.EntityCategory
 }
 
-func NewHandlerUser(user entity.EntityUser) *handlerUser {
-	return &handlerUser{user: user}
+func NewHandlerCategory(category entity.EntityCategory) *handlerCategory {
+	return &handlerCategory{category: category}
 }
 
-func (h *handlerUser) HandlerHello(ctx *gin.Context) {
+func (h *handlerCategory) HandlerHello(ctx *gin.Context) {
 	helpers.APIResponse(ctx, "Dota", http.StatusOK, nil)
 }
 
-func (h *handlerUser) HandlerResults(ctx *gin.Context) {
+func (h *handlerCategory) HandlerResults(ctx *gin.Context) {
 
-	res, err := h.user.EntityResults()
+	res, err := h.category.EntityResults()
 
 	if err.Type == "error_results_01" {
 		helpers.APIResponse(ctx, "User not found ", err.Code, nil)
@@ -34,12 +34,12 @@ func (h *handlerUser) HandlerResults(ctx *gin.Context) {
 
 }
 
-func (h *handlerUser) HandlerResult(ctx *gin.Context) {
-	var body schemas.SchemasUser
+func (h *handlerCategory) HandlerResult(ctx *gin.Context) {
+	var body schemas.SchemaCategories
 	id := ctx.Param("id")
 	body.ID = id
 
-	res, err := h.user.EntityResult(&body)
+	res, err := h.category.EntityResult(&body)
 
 	if err.Type == "error_result_01" {
 		helpers.APIResponse(ctx, fmt.Sprintf("Outlet data not found for this id %s ", id), err.Code, nil)
@@ -49,8 +49,8 @@ func (h *handlerUser) HandlerResult(ctx *gin.Context) {
 	helpers.APIResponse(ctx, "USer data already to use", http.StatusOK, res)
 }
 
-func (h *handlerUser) HandlerCreate(ctx *gin.Context) {
-	var body schemas.SchemasUser
+func (h *handlerCategory) HandlerCreate(ctx *gin.Context) {
+	var body schemas.SchemaCategories
 
 	err := ctx.ShouldBindJSON(&body)
 
@@ -58,7 +58,7 @@ func (h *handlerUser) HandlerCreate(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
 	}
 
-	_, error := h.user.EntityCreate(&body)
+	_, error := h.category.EntityCreate(&body)
 
 	if error.Type == "error_update_01" {
 		helpers.APIResponse(ctx, "User email already exist", error.Code, nil)
@@ -73,8 +73,8 @@ func (h *handlerUser) HandlerCreate(ctx *gin.Context) {
 	helpers.APIResponse(ctx, "Create new User successfully", http.StatusCreated, nil)
 }
 
-func (h *handlerUser) HandlerUpdate(ctx *gin.Context) {
-	var body schemas.SchemasUser
+func (h *handlerCategory) HandlerUpdate(ctx *gin.Context) {
+	var body schemas.SchemaCategories
 
 	err := ctx.ShouldBindJSON(&body)
 
@@ -82,7 +82,7 @@ func (h *handlerUser) HandlerUpdate(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
 	}
 
-	_, error := h.user.EntityUpdate(&body)
+	_, error := h.category.EntityUpdate(&body)
 
 	if error.Type == "error_update_01" {
 		helpers.APIResponse(ctx, "Failed get id", error.Code, nil)
@@ -97,8 +97,8 @@ func (h *handlerUser) HandlerUpdate(ctx *gin.Context) {
 	helpers.APIResponse(ctx, "Update User successfully", http.StatusCreated, nil)
 }
 
-func (h *handlerUser) HandlerDelete(ctx *gin.Context) {
-	var body schemas.SchemasUser
+func (h *handlerCategory) HandlerDelete(ctx *gin.Context) {
+	var body schemas.SchemaCategories
 	id := ctx.Param("id")
 	body.ID = id
 
@@ -108,7 +108,7 @@ func (h *handlerUser) HandlerDelete(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
 	}
 
-	res, error := h.user.EntityResult(&body)
+	res, error := h.category.EntityResult(&body)
 
 	if error.Type == "error_result_01" {
 		helpers.APIResponse(ctx, fmt.Sprintf("User data not found for this id %s ", id), error.Code, nil)
