@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type handlerCategory struct {
@@ -19,7 +20,7 @@ func NewHandlerCategory(category entity.EntityCategory) *handlerCategory {
 }
 
 func (h *handlerCategory) HandlerHello(ctx *gin.Context) {
-	helpers.APIResponse(ctx, "Dota", http.StatusOK, nil)
+	helpers.APIResponse(ctx, "Hello Category Routes", http.StatusOK, nil)
 }
 
 func (h *handlerCategory) HandlerResults(ctx *gin.Context) {
@@ -51,11 +52,16 @@ func (h *handlerCategory) HandlerResult(ctx *gin.Context) {
 
 func (h *handlerCategory) HandlerCreate(ctx *gin.Context) {
 	var body schemas.SchemaCategories
+	validate := validator.New()
 
 	err := ctx.ShouldBindJSON(&body)
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.category.EntityCreate(&body)
@@ -75,11 +81,16 @@ func (h *handlerCategory) HandlerCreate(ctx *gin.Context) {
 
 func (h *handlerCategory) HandlerUpdate(ctx *gin.Context) {
 	var body schemas.SchemaCategories
+	validate := validator.New()
 
 	err := ctx.ShouldBindJSON(&body)
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.category.EntityUpdate(&body)

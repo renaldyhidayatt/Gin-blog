@@ -5,7 +5,7 @@ type SchemasUser struct {
 	FirstName string `json:"firstname" validate:"required,lowercase"`
 	LastName  string `json:"lastname" validate:"required,lowercase"`
 	Bio       string `json:"bio" validate:"required,lowercase"`
-	Image     string `json:"image"`
+	Image     string `json:"image" validate:"required, lowercase"`
 	Email     string `json:"email" validate:"required,lowercase"`
 	Password  string `json:"password" validate:"required,lowercase"`
 }

@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type handlerComment struct {
@@ -19,7 +20,7 @@ func NewHandlerComment(comment entity.EntityComment) *handlerComment {
 }
 
 func (h *handlerComment) HandlerHello(ctx *gin.Context) {
-	helpers.APIResponse(ctx, "Dota", http.StatusOK, nil)
+	helpers.APIResponse(ctx, "Hello Comment Routes", http.StatusOK, nil)
 }
 
 func (h *handlerComment) HandlerResults(ctx *gin.Context) {
@@ -49,6 +50,7 @@ func (h *handlerComment) HandlerResult(ctx *gin.Context) {
 
 func (h *handlerComment) HandlerCreate(ctx *gin.Context) {
 	var body schemas.SchemaComment
+	validate := validator.New()
 
 	body.UserID = ctx.MustGet("userID").(string)
 
@@ -56,6 +58,10 @@ func (h *handlerComment) HandlerCreate(ctx *gin.Context) {
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.comment.EntityCreate(&body)
@@ -70,6 +76,7 @@ func (h *handlerComment) HandlerCreate(ctx *gin.Context) {
 
 func (h *handlerComment) HandlerUpdate(ctx *gin.Context) {
 	var body schemas.SchemaComment
+	validate := validator.New()
 
 	body.UserID = ctx.MustGet("userID").(string)
 
@@ -77,6 +84,10 @@ func (h *handlerComment) HandlerUpdate(ctx *gin.Context) {
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.comment.EntityUpdate(&body)

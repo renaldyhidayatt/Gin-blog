@@ -77,9 +77,9 @@ func NewRoute(db *gorm.DB, router *gin.Engine) {
 	routeArticle.PUT("/:id", handlerArticle.HandlerUpdate)
 	routeArticle.DELETE("/:id", handlerArticle.HandlerResults)
 
-	routerComment.GET("/", handlerArticle.HandlerResults)
-	routerComment.POST("/create", handlerArticle.HandlerCreate)
-	routerComment.GET("/:id", handlerArticle.HandlerResult)
-	routerComment.PUT("/:id", handlerArticle.HandlerUpdate)
-	routerComment.DELETE("/:id", handlerArticle.HandlerResults)
+	routerComment.GET("/", handlerComment.HandlerResults)
+	routerComment.POST("/create", handlerComment.HandlerCreate)
+	routerComment.GET("/:id", handlerComment.HandlerResult)
+	routerComment.PUT("/:id", handlerComment.HandlerUpdate)
+	routerComment.DELETE("/:id", handlerComment.HandlerResults)
 }

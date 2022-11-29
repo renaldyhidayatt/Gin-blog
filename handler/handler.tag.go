@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type handlerTag struct {
@@ -19,7 +20,7 @@ func NewHandlerTag(tag entity.EntityTag) *handlerTag {
 }
 
 func (h *handlerTag) HandlerHello(ctx *gin.Context) {
-	helpers.APIResponse(ctx, "dota", http.StatusOK, nil)
+	helpers.APIResponse(ctx, "Hello Tag Routes", http.StatusOK, nil)
 }
 
 func (h *handlerTag) HandlerResults(ctx *gin.Context) {
@@ -49,11 +50,16 @@ func (h *handlerTag) HandlerResult(ctx *gin.Context) {
 
 func (h *handlerTag) HandlerCreate(ctx *gin.Context) {
 	var body schemas.SchemaTag
+	validate := validator.New()
 
 	err := ctx.ShouldBindJSON(&body)
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.tag.EntityCreate(&body)
@@ -73,11 +79,16 @@ func (h *handlerTag) HandlerCreate(ctx *gin.Context) {
 
 func (h *handlerTag) HandlerUpdate(ctx *gin.Context) {
 	var body schemas.SchemaTag
+	validate := validator.New()
 
 	err := ctx.ShouldBindJSON(&body)
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.tag.EntityUpdate(&body)

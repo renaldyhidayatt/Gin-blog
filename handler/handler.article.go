@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type handlerArticle struct {
@@ -19,7 +20,7 @@ func NewHandlerArticle(article entity.EntityArticle) *handlerArticle {
 }
 
 func (h *handlerArticle) HandlerHello(ctx *gin.Context) {
-	helpers.APIResponse(ctx, "Dota", http.StatusOK, nil)
+	helpers.APIResponse(ctx, "Hello Article", http.StatusOK, nil)
 }
 
 func (h *handlerArticle) HandlerResults(ctx *gin.Context) {
@@ -49,6 +50,7 @@ func (h *handlerArticle) HandlerResult(ctx *gin.Context) {
 
 func (h *handlerArticle) HandlerCreate(ctx *gin.Context) {
 	var body schemas.SchemaArticle
+	validate := validator.New()
 
 	body.UserID = ctx.MustGet("userID").(string)
 
@@ -56,6 +58,10 @@ func (h *handlerArticle) HandlerCreate(ctx *gin.Context) {
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.article.EntityCreate(&body)
@@ -70,6 +76,7 @@ func (h *handlerArticle) HandlerCreate(ctx *gin.Context) {
 
 func (h *handlerArticle) HandlerUpdate(ctx *gin.Context) {
 	var body schemas.SchemaArticle
+	validate := validator.New()
 
 	body.UserID = ctx.MustGet("userID").(string)
 
@@ -77,6 +84,10 @@ func (h *handlerArticle) HandlerUpdate(ctx *gin.Context) {
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.article.EntityUpdate(&body)

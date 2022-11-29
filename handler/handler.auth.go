@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type handlerAuth struct {
@@ -20,17 +21,22 @@ func NewHandlerAuth(auth entity.EntityAuth) *handlerAuth {
 }
 
 func (h *handlerAuth) HandlerHello(ctx *gin.Context) {
-	helpers.APIResponse(ctx, "Dota", http.StatusOK, nil)
+	helpers.APIResponse(ctx, "Hello Auth Routes", http.StatusOK, nil)
 }
 
 func (h *handlerAuth) HandlerRegister(ctx *gin.Context) {
 	var body schemas.SchemasUser
+	validate := validator.New()
 
 	err := ctx.ShouldBindJSON(&body)
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json data from body failed", http.StatusBadRequest, nil)
 		return
+	}
+
+	if err = validate.Struct(&body); err != nil {
+		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
 	_, error := h.auth.EntityRegister(&body)
