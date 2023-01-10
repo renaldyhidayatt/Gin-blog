@@ -6,6 +6,7 @@ import (
 	"ginBlog/helpers"
 	"ginBlog/schemas"
 	"net/http"
+	"path"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -81,9 +82,25 @@ func (h *handlerUser) HandlerCreate(ctx *gin.Context) {
 
 func (h *handlerUser) HandlerUpdate(ctx *gin.Context) {
 	var body schemas.SchemasUser
+	file, _ := ctx.FormFile("image")
+
+	body.FirstName = ctx.PostForm("firstname")
+	body.LastName = ctx.PostForm("lastname")
+	body.Bio = ctx.PostForm("bio")
+	body.Image = file.Filename
+	body.Email = ctx.PostForm("email")
+	body.Password = ctx.PostForm("password")
+
+	err := ctx.SaveUploadedFile(file, path.Join("images/"+file.Filename))
+
+	if err != nil {
+		helpers.APIResponse(ctx, "File upload error", http.StatusBadRequest, nil)
+		return
+	}
+
 	validate := validator.New()
 
-	err := ctx.ShouldBindJSON(&body)
+	err = ctx.ShouldBindJSON(&body)
 
 	if err != nil {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)

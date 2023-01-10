@@ -20,5 +20,5 @@ func main() {
 
 	routes.NewRoute(db, r)
 
-	r.Run()
+	r.Run(":5000")
 }

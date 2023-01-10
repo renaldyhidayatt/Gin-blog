@@ -17,12 +17,11 @@ func NewRepositoryAuth(db *gorm.DB) *repositoryAuth {
 	return &repositoryAuth{db: db}
 }
 
-func (r *repositoryAuth) EntityRegister(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (r *repositoryAuth) EntityRegister(input *schemas.SchemaAuth) (*models.ModelUser, schemas.SchemaDatabaseError) {
 	var user models.ModelUser
 	user.FirstName = input.FirstName
 	user.LastName = input.LastName
 	user.Bio = input.Bio
-	user.Image = input.Image
 	user.Email = input.Email
 	user.Password = input.Password
 
@@ -53,7 +52,7 @@ func (r *repositoryAuth) EntityRegister(input *schemas.SchemasUser) (*models.Mod
 	return &user, <-err
 }
 
-func (r *repositoryAuth) EntityLogin(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (r *repositoryAuth) EntityLogin(input *schemas.SchemaAuth) (*models.ModelUser, schemas.SchemaDatabaseError) {
 	var user models.ModelUser
 	user.Email = input.Email
 	user.Password = input.Password

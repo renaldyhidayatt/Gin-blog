@@ -10,7 +10,6 @@ import (
 
 type ModelUser struct {
 	ID        string `json:"id" gorm:"primary_key"`
-	Username  string `json:"username" gorm:"type:varchar; not null"`
 	FirstName string `json:"firstname" gorm:"type:varchar;not null"`
 	LastName  string `json:"lastname" gorm:"type:varchar;not null"`
 	Email     string `json:"email" gorm:"type:varchar;unique;not null"`

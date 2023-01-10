@@ -13,7 +13,7 @@ type ModelTag struct {
 	Name        string         `json:"name" gorm:"type:varchar; not null"`
 	Slug        string         `json:"slug" gorm:"type:varchar; not null"`
 	Description string         `json:"description" gorm:"type:varchar; not null"`
-	Article     []ModelArticle `gorm:"many2many:articles_tags;"`
+	Article     []ModelArticle `gorm:"many2many:models_articlestags;"`
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
 }

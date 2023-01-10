@@ -12,7 +12,7 @@ type ModelCategory struct {
 	Name        string         `json:"name" gorm:"unique_index"`
 	Slug        string         `json:"slug" gorm:"unique_index"`
 	Description string         `json:"description" gorm:"type:text"`
-	Article     []ModelArticle `gorm:"many2many:articles_categories;"`
+	Article     []ModelArticle `gorm:"many2many:model_articlescategories;"`
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
 }

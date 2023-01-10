@@ -25,7 +25,7 @@ func (h *handlerAuth) HandlerHello(ctx *gin.Context) {
 }
 
 func (h *handlerAuth) HandlerRegister(ctx *gin.Context) {
-	var body schemas.SchemasUser
+	var body schemas.SchemaAuth
 	validate := validator.New()
 
 	err := ctx.ShouldBindJSON(&body)
@@ -56,7 +56,7 @@ func (h *handlerAuth) HandlerRegister(ctx *gin.Context) {
 }
 
 func (h *handlerAuth) HandlerLogin(ctx *gin.Context) {
-	var body schemas.SchemasUser
+	var body schemas.SchemaAuth
 	err := ctx.ShouldBindJSON(&body)
 
 	if err != nil {
