@@ -60,17 +60,23 @@ func (r *repositoryArticle) EntityCreate(input *schemas.SchemaArticle) (*models.
 
 }
 
-func (r *repositoryArticle) EntityResults() (*[]models.ModelArticle, error) {
+func (r *repositoryArticle) EntityResults(page, size int) (*[]models.ModelArticle, error) {
 	var article []models.ModelArticle
 
 	db := r.db.Model(&article)
 
-	checkArticle := db.Debug().Find(&article)
+	checkArticle := db.Debug().Limit(size).Offset((page - 1) * size).Find(&article)
 
 	if checkArticle.RowsAffected < 1 {
 		return nil, fmt.Errorf("not found articles")
 	}
 	return &article, nil
+}
+
+func (r *repositoryArticle) EntityCount() (int64, error) {
+	var count int64
+	err := r.db.Model(&models.ModelArticle{}).Count(&count).Error
+	return count, err
 }
 
 func (r *repositoryArticle) EntityResult(input *schemas.SchemaArticle) (*models.ModelArticle, error) {

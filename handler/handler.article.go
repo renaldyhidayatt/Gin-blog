@@ -5,6 +5,7 @@ import (
 	"ginBlog/helpers"
 	"ginBlog/schemas"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -23,14 +24,17 @@ func (h *handlerArticle) HandlerHello(ctx *gin.Context) {
 }
 
 func (h *handlerArticle) HandlerResults(ctx *gin.Context) {
-	res, err := h.article.EntityResults()
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "10"))
+
+	res, err := h.article.EntityResults(page, size)
 
 	if err != nil {
 		helpers.APIResponse(ctx, err.Error(), http.StatusNotFound, nil)
 
 	}
 
-	helpers.APIResponse(ctx, "Berhasil mendapatkan data", http.StatusOK, res)
+	helpers.APIResPagination(ctx, "berhasil mendapatkan data", http.StatusOK, res, page, size, h.article)
 }
 
 func (h *handlerArticle) HandlerResult(ctx *gin.Context) {

@@ -14,8 +14,14 @@ func NewServiceArticle(article entity.EntityArticle) *serviceArticle {
 	return &serviceArticle{article: article}
 }
 
-func (s *serviceArticle) EntityResults() (*[]models.ModelArticle, error) {
-	res, err := s.article.EntityResults()
+func (s *serviceArticle) EntityResults(page, size int) (*[]models.ModelArticle, error) {
+	res, err := s.article.EntityResults(page, size)
+
+	return res, err
+}
+
+func (s *serviceArticle) EntityCount() (int64, error) {
+	res, err := s.article.EntityCount()
 
 	return res, err
 }

@@ -1,7 +1,9 @@
 package helpers
 
 import (
+	"ginBlog/entity"
 	"ginBlog/schemas"
+	"math"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,11 +23,27 @@ func APIResponse(ctx *gin.Context, Message string, StatusCode int, Data interfac
 	}
 }
 
-func ErrorResponse(ctx *gin.Context, StatusCode int, Error string) {
-	err := schemas.SchemaErrorResponse{
-		StatusCode: StatusCode,
-		Message:    Error,
+func APIResPagination(ctx *gin.Context, message string, status int, data interface{}, page int, size int, h entity.EntityArticle) {
+
+	count, _ := h.EntityCount()
+
+	var totalPages float64
+	if float64(count) < float64(size) {
+		totalPages = 1
+	} else {
+		totalPages = math.Ceil(float64(count) / float64(size))
 	}
 
-	ctx.AbortWithStatusJSON(err.StatusCode, err)
+	pagination := schemas.Pagination{
+		Page:       page,
+		Size:       size,
+		Count:      count,
+		TotalPages: totalPages,
+	}
+
+	ctx.JSON(status, gin.H{
+		"message":    message,
+		"data":       data,
+		"pagination": pagination,
+	})
 }
