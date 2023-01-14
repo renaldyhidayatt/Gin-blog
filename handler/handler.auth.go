@@ -37,17 +37,13 @@ func (h *handlerAuth) HandlerRegister(ctx *gin.Context) {
 
 	if err = validate.Struct(&body); err != nil {
 		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
-	}
-
-	_, error := h.auth.EntityRegister(&body)
-
-	if error.Type == "error_register_01" {
-		helpers.APIResponse(ctx, "Email already taken", error.Code, nil)
 		return
 	}
 
-	if error.Type == "error_register_02" {
-		helpers.APIResponse(ctx, "Register new user account failed", error.Code, nil)
+	_, err = h.auth.EntityRegister(&body)
+
+	if err != nil {
+		helpers.APIResponse(ctx, "Error: %s"+err.Error(), http.StatusConflict, nil)
 		return
 	}
 
@@ -64,15 +60,10 @@ func (h *handlerAuth) HandlerLogin(ctx *gin.Context) {
 		return
 	}
 
-	res, error := h.auth.EntityLogin(&body)
+	res, err := h.auth.EntityLogin(&body)
 
-	if error.Type == "error_login_01" {
-		helpers.APIResponse(ctx, "User account is not never registered", error.Code, nil)
-		return
-	}
-
-	if error.Type == "error_login_02" {
-		helpers.APIResponse(ctx, "Email or Password is wrong", error.Code, nil)
+	if err != nil {
+		helpers.APIResponse(ctx, "Error: %s"+err.Error(), http.StatusNotFound, nil)
 		return
 	}
 

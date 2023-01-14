@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"ginBlog/entity"
 	"ginBlog/helpers"
 	"ginBlog/schemas"
@@ -26,11 +25,12 @@ func (h *handlerArticle) HandlerHello(ctx *gin.Context) {
 func (h *handlerArticle) HandlerResults(ctx *gin.Context) {
 	res, err := h.article.EntityResults()
 
-	if err.Type == "error_results_01" {
-		helpers.APIResponse(ctx, "Comment not found ", err.Code, nil)
-		return
+	if err != nil {
+		helpers.APIResponse(ctx, err.Error(), http.StatusNotFound, nil)
+
 	}
-	helpers.APIResponse(ctx, "Article found", http.StatusOK, res)
+
+	helpers.APIResponse(ctx, "Berhasil mendapatkan data", http.StatusOK, res)
 }
 
 func (h *handlerArticle) HandlerResult(ctx *gin.Context) {
@@ -40,11 +40,12 @@ func (h *handlerArticle) HandlerResult(ctx *gin.Context) {
 
 	res, err := h.article.EntityResult(&body)
 
-	if err.Type == "error_result_01" {
-		helpers.APIResponse(ctx, fmt.Sprintf("Article data not found for this id %s ", id), err.Code, nil)
+	if err != nil {
+		helpers.APIResponse(ctx, "Error %s"+err.Error(), http.StatusNotFound, nil)
 		return
 
 	}
+
 	helpers.APIResponse(ctx, "Comment data already to use", http.StatusOK, res)
 }
 
@@ -64,11 +65,12 @@ func (h *handlerArticle) HandlerCreate(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
-	_, error := h.article.EntityCreate(&body)
+	_, err = h.article.EntityCreate(&body)
 
-	if error.Type == "error_create_01" {
-		helpers.APIResponse(ctx, "failed Article Comment", error.Code, nil)
+	if err != nil {
+		helpers.APIResponse(ctx, "Error %s"+err.Error(), http.StatusBadRequest, nil)
 		return
+
 	}
 
 	helpers.APIResponse(ctx, "Create new Article successfully", http.StatusCreated, nil)
@@ -90,16 +92,10 @@ func (h *handlerArticle) HandlerUpdate(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
-	_, error := h.article.EntityUpdate(&body)
+	_, err = h.article.EntityUpdate(&body)
 
-	if error.Type == "error_update_01" {
-		helpers.APIResponse(ctx, "Failed get id", error.Code, nil)
-		return
-	}
-
-	if error.Type == "error_create_02" {
-		helpers.APIResponse(ctx, "failed update comment", error.Code, nil)
-		return
+	if err != nil {
+		helpers.APIResponse(ctx, "Error %s"+err.Error(), http.StatusNotFound, nil)
 	}
 
 	helpers.APIResponse(ctx, "Article successfully", http.StatusCreated, nil)
@@ -116,12 +112,10 @@ func (h *handlerArticle) HandlerDelete(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
 	}
 
-	res, error := h.article.EntityResult(&body)
+	res, err := h.article.EntityDelete(&body)
 
-	if error.Type == "error_result_01" {
-		helpers.APIResponse(ctx, fmt.Sprintf("Article data not found for this id %s ", id), error.Code, nil)
-		return
-
+	if err != nil {
+		helpers.APIResponse(ctx, "Error: %s"+err.Error(), http.StatusNotFound, nil)
 	}
-	helpers.APIResponse(ctx, "Article data already to use", http.StatusOK, res)
+	helpers.APIResponse(ctx, "Article successfully delete", http.StatusOK, res)
 }

@@ -6,9 +6,9 @@ import (
 )
 
 type EntityComment interface {
-	EntityCreate(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError)
-	EntityResult(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError)
-	EntityResults() (*[]models.ModelComment, schemas.SchemaDatabaseError)
-	EntityDelete(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError)
-	EntityUpdate(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError)
+	EntityCreate(input *schemas.SchemaComment) (*models.ModelComment, error)
+	EntityResult(input *schemas.SchemaComment) (*models.ModelComment, error)
+	EntityResults() (*[]models.ModelComment, error)
+	EntityDelete(input *schemas.SchemaComment) (*models.ModelComment, error)
+	EntityUpdate(input *schemas.SchemaComment) (*models.ModelComment, error)
 }

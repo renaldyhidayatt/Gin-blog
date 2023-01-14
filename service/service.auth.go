@@ -14,7 +14,7 @@ func NewServiceAuth(auth entity.EntityAuth) *serviceAuth {
 	return &serviceAuth{auth: auth}
 }
 
-func (s *serviceAuth) EntityRegister(input *schemas.SchemaAuth) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (s *serviceAuth) EntityRegister(input *schemas.SchemaAuth) (*models.ModelUser, error) {
 	var schema schemas.SchemaAuth
 	schema.FirstName = input.FirstName
 	schema.LastName = input.LastName
@@ -26,7 +26,7 @@ func (s *serviceAuth) EntityRegister(input *schemas.SchemaAuth) (*models.ModelUs
 	return res, err
 }
 
-func (s *serviceAuth) EntityLogin(input *schemas.SchemaAuth) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (s *serviceAuth) EntityLogin(input *schemas.SchemaAuth) (*models.ModelUser, error) {
 	var schema schemas.SchemaAuth
 	schema.Email = input.Email
 	schema.Password = input.Password

@@ -6,9 +6,9 @@ import (
 )
 
 type EntityTag interface {
-	EntityCreate(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError)
-	EntityResult(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError)
-	EntityResults() (*[]models.ModelTag, schemas.SchemaDatabaseError)
-	EntityDelete(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError)
-	EntityUpdate(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError)
+	EntityCreate(input *schemas.SchemaTag) (*models.ModelTag, error)
+	EntityResult(input *schemas.SchemaTag) (*models.ModelTag, error)
+	EntityResults() (*[]models.ModelTag, error)
+	EntityDelete(input *schemas.SchemaTag) (*models.ModelTag, error)
+	EntityUpdate(input *schemas.SchemaTag) (*models.ModelTag, error)
 }

@@ -14,13 +14,13 @@ func NewServiceArticle(article entity.EntityArticle) *serviceArticle {
 	return &serviceArticle{article: article}
 }
 
-func (s *serviceArticle) EntityResults() (*[]models.ModelArticle, schemas.SchemaDatabaseError) {
+func (s *serviceArticle) EntityResults() (*[]models.ModelArticle, error) {
 	res, err := s.article.EntityResults()
 
 	return res, err
 }
 
-func (s *serviceArticle) EntityCreate(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (s *serviceArticle) EntityCreate(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article schemas.SchemaArticle
 
 	article.Title = input.Title
@@ -36,7 +36,7 @@ func (s *serviceArticle) EntityCreate(input *schemas.SchemaArticle) (*models.Mod
 
 }
 
-func (s *serviceArticle) EntityResult(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (s *serviceArticle) EntityResult(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article schemas.SchemaArticle
 
 	article.ID = input.ID
@@ -46,7 +46,7 @@ func (s *serviceArticle) EntityResult(input *schemas.SchemaArticle) (*models.Mod
 	return res, err
 }
 
-func (s *serviceArticle) EntityUpdate(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (s *serviceArticle) EntityUpdate(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article schemas.SchemaArticle
 
 	article.Title = input.Title
@@ -59,7 +59,7 @@ func (s *serviceArticle) EntityUpdate(input *schemas.SchemaArticle) (*models.Mod
 	return res, err
 }
 
-func (s *serviceArticle) EntityDelete(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (s *serviceArticle) EntityDelete(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article schemas.SchemaArticle
 
 	article.ID = input.ID

@@ -2,7 +2,6 @@ package helpers
 
 import (
 	"ginBlog/schemas"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,10 +21,10 @@ func APIResponse(ctx *gin.Context, Message string, StatusCode int, Data interfac
 	}
 }
 
-func ErrorResponse(ctx *gin.Context, Error interface{}) {
+func ErrorResponse(ctx *gin.Context, StatusCode int, Error string) {
 	err := schemas.SchemaErrorResponse{
-		StatusCode: http.StatusBadRequest,
-		Error:      Error,
+		StatusCode: StatusCode,
+		Message:    Error,
 	}
 
 	ctx.AbortWithStatusJSON(err.StatusCode, err)

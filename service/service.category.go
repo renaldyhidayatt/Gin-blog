@@ -14,13 +14,13 @@ func NewServiceCategory(category entity.EntityCategory) *serviceCategory {
 	return &serviceCategory{category: category}
 }
 
-func (s *serviceCategory) EntityResults() (*[]models.ModelCategory, schemas.SchemaDatabaseError) {
+func (s *serviceCategory) EntityResults() (*[]models.ModelCategory, error) {
 	res, err := s.category.EntityResults()
 
 	return res, err
 }
 
-func (s *serviceCategory) EntityCreate(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (s *serviceCategory) EntityCreate(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category schemas.SchemaCategories
 
 	category.Name = input.Name
@@ -31,7 +31,7 @@ func (s *serviceCategory) EntityCreate(input *schemas.SchemaCategories) (*models
 	return res, err
 }
 
-func (s *serviceCategory) EntityResult(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (s *serviceCategory) EntityResult(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category schemas.SchemaCategories
 
 	category.ID = input.ID
@@ -41,7 +41,7 @@ func (s *serviceCategory) EntityResult(input *schemas.SchemaCategories) (*models
 	return res, err
 }
 
-func (s *serviceCategory) EntityUpdate(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (s *serviceCategory) EntityUpdate(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category schemas.SchemaCategories
 
 	category.Name = input.Name
@@ -52,7 +52,7 @@ func (s *serviceCategory) EntityUpdate(input *schemas.SchemaCategories) (*models
 	return res, err
 }
 
-func (s *serviceCategory) EntityDelete(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (s *serviceCategory) EntityDelete(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category schemas.SchemaCategories
 
 	category.ID = input.ID

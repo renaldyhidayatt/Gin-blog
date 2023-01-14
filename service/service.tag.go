@@ -14,12 +14,12 @@ func NewServiceTag(tag entity.EntityTag) *serviceTag {
 	return &serviceTag{tag: tag}
 }
 
-func (s *serviceTag) EntityResults() (*[]models.ModelTag, schemas.SchemaDatabaseError) {
+func (s *serviceTag) EntityResults() (*[]models.ModelTag, error) {
 	res, err := s.tag.EntityResults()
 	return res, err
 }
 
-func (s *serviceTag) EntityCreate(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError) {
+func (s *serviceTag) EntityCreate(input *schemas.SchemaTag) (*models.ModelTag, error) {
 	var tag schemas.SchemaTag
 
 	tag.Name = input.Name
@@ -30,7 +30,7 @@ func (s *serviceTag) EntityCreate(input *schemas.SchemaTag) (*models.ModelTag, s
 	return res, err
 }
 
-func (s *serviceTag) EntityResult(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError) {
+func (s *serviceTag) EntityResult(input *schemas.SchemaTag) (*models.ModelTag, error) {
 	var tag schemas.SchemaTag
 
 	tag.ID = input.ID
@@ -40,7 +40,7 @@ func (s *serviceTag) EntityResult(input *schemas.SchemaTag) (*models.ModelTag, s
 	return res, err
 }
 
-func (s *serviceTag) EntityUpdate(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError) {
+func (s *serviceTag) EntityUpdate(input *schemas.SchemaTag) (*models.ModelTag, error) {
 	var tag schemas.SchemaTag
 
 	tag.Name = input.Name
@@ -51,7 +51,7 @@ func (s *serviceTag) EntityUpdate(input *schemas.SchemaTag) (*models.ModelTag, s
 	return res, err
 }
 
-func (s *serviceTag) EntityDelete(input *schemas.SchemaTag) (*models.ModelTag, schemas.SchemaDatabaseError) {
+func (s *serviceTag) EntityDelete(input *schemas.SchemaTag) (*models.ModelTag, error) {
 	var tag schemas.SchemaTag
 
 	tag.ID = input.ID

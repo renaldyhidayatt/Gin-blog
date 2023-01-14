@@ -6,8 +6,8 @@ type SchemaDatabaseError struct {
 }
 
 type SchemaErrorResponse struct {
-	StatusCode int         `json:"code"`
-	Error      interface{} `json:"error"`
+	StatusCode int    `json:"code"`
+	Message    string `json:"message"`
 }
 
 type SchemaUnathorizatedError struct {

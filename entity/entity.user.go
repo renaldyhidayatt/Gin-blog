@@ -6,9 +6,9 @@ import (
 )
 
 type EntityUser interface {
-	EntityCreate(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError)
-	EntityResult(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError)
-	EntityResults() (*[]models.ModelUser, schemas.SchemaDatabaseError)
-	EntityDelete(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError)
-	EntityUpdate(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError)
+	EntityCreate(input *schemas.SchemasUser) (*models.ModelUser, error)
+	EntityResult(input *schemas.SchemasUser) (*models.ModelUser, error)
+	EntityResults() (*[]models.ModelUser, error)
+	EntityDelete(input *schemas.SchemasUser) (*models.ModelUser, error)
+	EntityUpdate(input *schemas.SchemasUser) (*models.ModelUser, error)
 }

@@ -6,6 +6,6 @@ import (
 )
 
 type EntityAuth interface {
-	EntityRegister(input *schemas.SchemaAuth) (*models.ModelUser, schemas.SchemaDatabaseError)
-	EntityLogin(input *schemas.SchemaAuth) (*models.ModelUser, schemas.SchemaDatabaseError)
+	EntityRegister(input *schemas.SchemaAuth) (*models.ModelUser, error)
+	EntityLogin(input *schemas.SchemaAuth) (*models.ModelUser, error)
 }

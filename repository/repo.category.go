@@ -1,9 +1,9 @@
 package repository
 
 import (
+	"fmt"
 	"ginBlog/models"
 	"ginBlog/schemas"
-	"net/http"
 
 	"gorm.io/gorm"
 )
@@ -16,100 +16,64 @@ func NewRepositoryCategory(db *gorm.DB) *repositoryCategory {
 	return &repositoryCategory{db: db}
 }
 
-func (r *repositoryCategory) EntityCreate(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (r *repositoryCategory) EntityCreate(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category models.ModelCategory
-
 	category.Name = input.Name
 	category.Description = input.Description
 
-	err := make(chan schemas.SchemaDatabaseError, 1)
-
 	db := r.db.Model(&category)
-
-	checkName := db.Debug().First(&category, "name = ?", input.Name)
-
-	if checkName.RowsAffected > 0 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusConflict,
-			Type: "error_create_01",
-		}
-	}
 
 	addCategory := db.Debug().Create(&category).Commit()
 
 	if addCategory.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusForbidden,
-			Type: "error_create_02",
-		}
-		return &category, <-err
+		return nil, fmt.Errorf("failed name category already exit")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-
-	return &category, <-err
+	return &category, nil
 }
 
-func (r *repositoryCategory) EntityResults() (*[]models.ModelCategory, schemas.SchemaDatabaseError) {
+func (r *repositoryCategory) EntityResults() (*[]models.ModelCategory, error) {
 	var category []models.ModelCategory
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&category)
 
 	checkCategory := db.Debug().Find(&category)
 
 	if checkCategory.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_results_01",
-		}
+		return nil, fmt.Errorf("failed category not found")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-	return &category, <-err
+	return &category, nil
 }
 
-func (r *repositoryCategory) EntityResult(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (r *repositoryCategory) EntityResult(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category models.ModelCategory
 
 	category.ID = input.ID
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&category)
 
 	checkCategory := db.Debug().First(&category)
 
 	if checkCategory.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_result_01",
-		}
-		return &category, <-err
+		return nil, fmt.Errorf("failed result category")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-	return &category, <-err
+	return &category, nil
 }
 
-func (r *repositoryCategory) EntityUpdate(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (r *repositoryCategory) EntityUpdate(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category models.ModelCategory
 
 	category.ID = input.ID
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&category)
 
 	checkCategoryID := db.Debug().First(&category)
 
 	if checkCategoryID.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_update_01",
-		}
-		return &category, <-err
+
+		return &category, fmt.Errorf("failed result category")
 	}
 
 	category.Name = input.Name
@@ -118,47 +82,29 @@ func (r *repositoryCategory) EntityUpdate(input *schemas.SchemaCategories) (*mod
 	updateCategory := db.Debug().Updates(&category)
 
 	if updateCategory.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusForbidden,
-			Type: "error_update_02",
-		}
-		return &category, <-err
+		return nil, fmt.Errorf("failed update category")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-
-	return &category, <-err
+	return &category, nil
 }
 
-func (r *repositoryCategory) EntityDelete(input *schemas.SchemaCategories) (*models.ModelCategory, schemas.SchemaDatabaseError) {
+func (r *repositoryCategory) EntityDelete(input *schemas.SchemaCategories) (*models.ModelCategory, error) {
 	var category models.ModelCategory
 	category.ID = input.ID
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&category)
 
 	checkCategory := db.Debug().First(&category)
 
 	if checkCategory.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_delete_01",
-		}
-		return &category, <-err
+		return nil, fmt.Errorf("failed result category")
 	}
 
 	deleteCategory := db.Debug().Delete(&category)
 
 	if deleteCategory.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusForbidden,
-			Type: "error_delete_02",
-		}
-		return &category, <-err
+		return nil, fmt.Errorf("failed delete category")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-
-	return &category, <-err
+	return &category, nil
 }

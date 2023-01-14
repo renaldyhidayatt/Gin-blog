@@ -14,13 +14,13 @@ func NewServiceComment(comment entity.EntityComment) *serviceComment {
 	return &serviceComment{comment: comment}
 }
 
-func (s *serviceComment) EntityResults() (*[]models.ModelComment, schemas.SchemaDatabaseError) {
+func (s *serviceComment) EntityResults() (*[]models.ModelComment, error) {
 	res, err := s.comment.EntityResults()
 
 	return res, err
 }
 
-func (s *serviceComment) EntityCreate(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError) {
+func (s *serviceComment) EntityCreate(input *schemas.SchemaComment) (*models.ModelComment, error) {
 	var comment schemas.SchemaComment
 
 	comment.Content = input.Content
@@ -31,7 +31,7 @@ func (s *serviceComment) EntityCreate(input *schemas.SchemaComment) (*models.Mod
 	return res, err
 }
 
-func (s *serviceComment) EntityResult(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError) {
+func (s *serviceComment) EntityResult(input *schemas.SchemaComment) (*models.ModelComment, error) {
 	var comment schemas.SchemaComment
 
 	comment.ID = input.ID
@@ -41,7 +41,7 @@ func (s *serviceComment) EntityResult(input *schemas.SchemaComment) (*models.Mod
 	return res, err
 }
 
-func (s *serviceComment) EntityUpdate(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError) {
+func (s *serviceComment) EntityUpdate(input *schemas.SchemaComment) (*models.ModelComment, error) {
 	var comment schemas.SchemaComment
 
 	comment.Content = input.Content
@@ -52,7 +52,7 @@ func (s *serviceComment) EntityUpdate(input *schemas.SchemaComment) (*models.Mod
 	return res, err
 }
 
-func (s *serviceComment) EntityDelete(input *schemas.SchemaComment) (*models.ModelComment, schemas.SchemaDatabaseError) {
+func (s *serviceComment) EntityDelete(input *schemas.SchemaComment) (*models.ModelComment, error) {
 	var comment schemas.SchemaComment
 
 	comment.ID = input.ID

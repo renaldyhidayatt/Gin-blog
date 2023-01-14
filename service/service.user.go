@@ -14,13 +14,13 @@ func NewServiceUser(user entity.EntityUser) *serviceUser {
 	return &serviceUser{user: user}
 }
 
-func (s *serviceUser) EntityResults() (*[]models.ModelUser, schemas.SchemaDatabaseError) {
+func (s *serviceUser) EntityResults() (*[]models.ModelUser, error) {
 	res, err := s.user.EntityResults()
 
 	return res, err
 }
 
-func (s *serviceUser) EntityCreate(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (s *serviceUser) EntityCreate(input *schemas.SchemasUser) (*models.ModelUser, error) {
 	var user schemas.SchemasUser
 
 	user.FirstName = input.FirstName
@@ -34,7 +34,7 @@ func (s *serviceUser) EntityCreate(input *schemas.SchemasUser) (*models.ModelUse
 	return res, err
 }
 
-func (s *serviceUser) EntityResult(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (s *serviceUser) EntityResult(input *schemas.SchemasUser) (*models.ModelUser, error) {
 	var user schemas.SchemasUser
 	user.ID = input.ID
 
@@ -44,7 +44,7 @@ func (s *serviceUser) EntityResult(input *schemas.SchemasUser) (*models.ModelUse
 
 }
 
-func (s *serviceUser) EntityUpdate(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (s *serviceUser) EntityUpdate(input *schemas.SchemasUser) (*models.ModelUser, error) {
 	var user schemas.SchemasUser
 
 	user.FirstName = input.FirstName
@@ -59,7 +59,7 @@ func (s *serviceUser) EntityUpdate(input *schemas.SchemasUser) (*models.ModelUse
 	return res, err
 }
 
-func (s *serviceUser) EntityDelete(input *schemas.SchemasUser) (*models.ModelUser, schemas.SchemaDatabaseError) {
+func (s *serviceUser) EntityDelete(input *schemas.SchemasUser) (*models.ModelUser, error) {
 	var user schemas.SchemasUser
 	user.ID = input.ID
 

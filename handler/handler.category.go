@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"ginBlog/entity"
 	"ginBlog/helpers"
 	"ginBlog/schemas"
@@ -27,8 +26,8 @@ func (h *handlerCategory) HandlerResults(ctx *gin.Context) {
 
 	res, err := h.category.EntityResults()
 
-	if err.Type == "error_results_01" {
-		helpers.APIResponse(ctx, "Category not found ", err.Code, nil)
+	if err != nil {
+		helpers.APIResponse(ctx, "Category not found ", http.StatusNotFound, nil)
 		return
 	}
 	helpers.APIResponse(ctx, "Category found", http.StatusOK, res)
@@ -42,8 +41,8 @@ func (h *handlerCategory) HandlerResult(ctx *gin.Context) {
 
 	res, err := h.category.EntityResult(&body)
 
-	if err.Type == "error_result_01" {
-		helpers.APIResponse(ctx, fmt.Sprintf("Category data not found for this id %s ", id), err.Code, nil)
+	if err != nil {
+		helpers.APIResponse(ctx, "Error: %s"+err.Error(), http.StatusNotFound, nil)
 		return
 
 	}
@@ -64,16 +63,11 @@ func (h *handlerCategory) HandlerCreate(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
-	_, error := h.category.EntityCreate(&body)
+	_, err = h.category.EntityCreate(&body)
 
-	if error.Type == "error_update_01" {
-		helpers.APIResponse(ctx, "Category name already exist", error.Code, nil)
-		return
-	}
+	if err != nil {
 
-	if error.Type == "error_create_02" {
-		helpers.APIResponse(ctx, "failed create category", error.Code, nil)
-		return
+		helpers.APIResponse(ctx, "Error: %s"+err.Error(), http.StatusBadRequest, nil)
 	}
 
 	helpers.APIResponse(ctx, "Create new Category successfully", http.StatusCreated, nil)
@@ -93,16 +87,11 @@ func (h *handlerCategory) HandlerUpdate(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Invalid Validation", http.StatusBadRequest, nil)
 	}
 
-	_, error := h.category.EntityUpdate(&body)
+	_, err = h.category.EntityUpdate(&body)
 
-	if error.Type == "error_update_01" {
-		helpers.APIResponse(ctx, "Failed get id", error.Code, nil)
-		return
-	}
+	if err != nil {
+		helpers.APIResponse(ctx, err.Error(), http.StatusBadRequest, nil)
 
-	if error.Type == "error_create_02" {
-		helpers.APIResponse(ctx, "failed update category", error.Code, nil)
-		return
 	}
 
 	helpers.APIResponse(ctx, "Category User successfully", http.StatusCreated, nil)
@@ -119,12 +108,12 @@ func (h *handlerCategory) HandlerDelete(ctx *gin.Context) {
 		helpers.APIResponse(ctx, "Parse json body failed", http.StatusBadRequest, nil)
 	}
 
-	res, error := h.category.EntityResult(&body)
+	res, err := h.category.EntityDelete(&body)
 
-	if error.Type == "error_result_01" {
-		helpers.APIResponse(ctx, fmt.Sprintf("Categpry data not found for this id %s ", id), error.Code, nil)
+	if err != nil {
+		helpers.APIResponse(ctx, "Error: %s"+err.Error(), http.StatusBadRequest, nil)
 		return
 
 	}
-	helpers.APIResponse(ctx, "Category data already to use", http.StatusOK, res)
+	helpers.APIResponse(ctx, "Category successfully delete", http.StatusOK, res)
 }

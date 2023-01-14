@@ -1,9 +1,9 @@
 package repository
 
 import (
+	"fmt"
 	"ginBlog/models"
 	"ginBlog/schemas"
-	"net/http"
 
 	"github.com/gosimple/slug"
 	"gorm.io/gorm"
@@ -19,7 +19,7 @@ func NewRepositoryArticle(db *gorm.DB) *repositoryArticle {
 	}
 }
 
-func (r *repositoryArticle) EntityCreate(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (r *repositoryArticle) EntityCreate(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article models.ModelArticle
 
 	article.Title = input.Title
@@ -27,17 +27,12 @@ func (r *repositoryArticle) EntityCreate(input *schemas.SchemaArticle) (*models.
 	article.Body = input.Body
 	article.UserID = input.UserID
 
-	err := make(chan schemas.SchemaDatabaseError, 1)
-
 	db := r.db.Model(&article)
 
 	checkArticle := db.Debug().First(&article, "title = ?", input.Title)
 
 	if checkArticle.RowsAffected > 0 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusConflict,
-			Type: "error_create_01",
-		}
+		return nil, fmt.Errorf("already name title article")
 	}
 
 	tags := make([]models.ModelTag, len(input.Tag))
@@ -57,78 +52,55 @@ func (r *repositoryArticle) EntityCreate(input *schemas.SchemaArticle) (*models.
 	addArticle := db.Debug().Create(&article).Commit()
 
 	if addArticle.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusForbidden,
-			Type: "error_create_02",
-		}
-		return &article, <-err
+
+		return nil, fmt.Errorf("failed create article")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-
-	return &article, <-err
+	return &article, nil
 
 }
 
-func (r *repositoryArticle) EntityResults() (*[]models.ModelArticle, schemas.SchemaDatabaseError) {
+func (r *repositoryArticle) EntityResults() (*[]models.ModelArticle, error) {
 	var article []models.ModelArticle
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&article)
 
 	checkArticle := db.Debug().Find(&article)
 
 	if checkArticle.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_results_01",
-		}
+		return nil, fmt.Errorf("not found articles")
 	}
-	err <- schemas.SchemaDatabaseError{}
-	return &article, <-err
+	return &article, nil
 }
 
-func (r *repositoryArticle) EntityResult(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (r *repositoryArticle) EntityResult(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article models.ModelArticle
 
 	article.ID = input.ID
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&article)
 
 	checkArticle := db.Debug().First(&article)
 
 	if checkArticle.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_result_01",
-		}
-		return &article, <-err
+		return nil, fmt.Errorf("article not found")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-	return &article, <-err
+	return &article, nil
 }
 
-func (r *repositoryArticle) EntityUpdate(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (r *repositoryArticle) EntityUpdate(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article models.ModelArticle
 
 	article.ID = input.ID
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&article)
 
 	checkArticleID := db.Debug().First(&article)
 
 	if checkArticleID.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_update_01",
-		}
-		return &article, <-err
+
+		return nil, fmt.Errorf("article not found")
 	}
 
 	article.Title = input.Title
@@ -139,49 +111,34 @@ func (r *repositoryArticle) EntityUpdate(input *schemas.SchemaArticle) (*models.
 	updateArticle := db.Debug().Updates(&article)
 
 	if updateArticle.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusForbidden,
-			Type: "error_update_02",
-		}
-		return &article, <-err
+
+		return nil, fmt.Errorf("failed update article")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-
-	return &article, <-err
+	return &article, nil
 }
 
-func (r *repositoryArticle) EntityDelete(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError) {
+func (r *repositoryArticle) EntityDelete(input *schemas.SchemaArticle) (*models.ModelArticle, error) {
 	var article models.ModelArticle
 
 	article.ID = input.ID
-
-	err := make(chan schemas.SchemaDatabaseError, 1)
 
 	db := r.db.Model(&article)
 
 	checkArticle := db.Debug().First(&article)
 
 	if checkArticle.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusNotFound,
-			Type: "error_delete_01",
-		}
-		return &article, <-err
+
+		return nil, fmt.Errorf("article not found")
 	}
 
 	deleteArticle := db.Debug().Delete(&article)
 
 	if deleteArticle.RowsAffected < 1 {
-		err <- schemas.SchemaDatabaseError{
-			Code: http.StatusForbidden,
-			Type: "error_delete_02",
-		}
-		return &article, <-err
+
+		return nil, fmt.Errorf("failed delete article")
 	}
 
-	err <- schemas.SchemaDatabaseError{}
-
-	return &article, <-err
+	return &article, nil
 
 }

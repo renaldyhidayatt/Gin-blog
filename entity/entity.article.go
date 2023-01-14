@@ -6,9 +6,9 @@ import (
 )
 
 type EntityArticle interface {
-	EntityCreate(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError)
-	EntityResult(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError)
-	EntityResults() (*[]models.ModelArticle, schemas.SchemaDatabaseError)
-	EntityDelete(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError)
-	EntityUpdate(input *schemas.SchemaArticle) (*models.ModelArticle, schemas.SchemaDatabaseError)
+	EntityCreate(input *schemas.SchemaArticle) (*models.ModelArticle, error)
+	EntityResult(input *schemas.SchemaArticle) (*models.ModelArticle, error)
+	EntityResults() (*[]models.ModelArticle, error)
+	EntityDelete(input *schemas.SchemaArticle) (*models.ModelArticle, error)
+	EntityUpdate(input *schemas.SchemaArticle) (*models.ModelArticle, error)
 }
